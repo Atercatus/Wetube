@@ -10,17 +10,15 @@ export const logout = (req, res) => {
 
 }
 
-export const users = (req, res) => {
-}
-
 export const userDetail = (req, res) => {
-    res.render("userDetail");
 }
 
 export const editProfile = (req, res) => {
+    res.render("editProfile");
 }
 
 export const changePassword = (req, res) => {
+    res.render("changePassword");
 }
 
 // lala = () => true // 이는 return true;와 같다
