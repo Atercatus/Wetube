@@ -1,6 +1,9 @@
 /node_modules
 /package-lock.json
 
+# Video files
+/videos
+
 # Logs
 logs
 *.log
@@ -81,3 +84,4 @@ typings/
 
 # DynamoDB Local files
 .dynamodb/
+

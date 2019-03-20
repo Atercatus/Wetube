@@ -1,40 +1,22 @@
-// fake db
+import mongoose from "mongoose";
+import dotenv from "dotenv";
+dotenv.config();
 
-export const videos = [
+mongoose.connect(
+    process.env.MONGO_URL, 
     {
-        id:123145123,
-        title: "Video awesome",
-        description: "This is something I love",
-        views:24,
-        videoFile:"https://archive.org/details/BigBuckBunny_124",
-        creator: {
-            id: 1231123,
-            name: "Nicolas",
-            email:"nicol@las.com"
-        }
-    },
-    {
-        id:457567,
-        title: "Video nice",
-        description: "This is something I love",
-        views:24,
-        videoFile:"https://archive.org/details/BigBuckBunny_124",
-        creator: {
-            id: 1231123,
-            name: "Nicolas",
-            email:"nicol@las.com"
-        }
-    },
-    {
-        id:3453456,
-        title: "Video perfect",
-        description: "This is something I love",
-        views:24,
-        videoFile:"https://archive.org/details/BigBuckBunny_124",
-        creator: {
-            id: 1231123,
-            name: "Nicolas",
-            email:"nicol@las.com"
-        }
+        useNewUrlParse: true,
+        useFindAndModify: false
     }
-];
+);
+
+const db = mongoose.connection;
+
+const handleOpen = () => {
+    console.log("Connected to DB");
+};
+
+const handleError = (error) => console.log(`Error on DB Connection: ${error}`);
+
+db.once("open", handleOpen);
+db.on("error", handleError);

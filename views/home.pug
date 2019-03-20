@@ -1,6 +1,12 @@
 extends layouts/main
+include mixins/videoBlock
 
 block content
    .videos 
         each video in videos
-            h1.title-class= video.title
+            +videoBlock({
+                id:video.id,
+                title:video.title,
+                views:video.views,
+                videoFile:video.videoFile,
+            })
