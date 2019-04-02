@@ -1,7 +1,7 @@
 import routes from "./routes";
 import multer from "multer"
 
-const multerVideo = multer({dest: "videos/"});
+const multerVideo = multer({dest: "uploads/videos/"});
 
 // export를 써야 다른 곳에서 사용 가능
 // local var to global var

@@ -3,6 +3,7 @@
 
 # Video files
 /videos
+uploads
 
 # Logs
 logs
