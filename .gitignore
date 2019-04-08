@@ -4,6 +4,9 @@
 yarn.lock
 .eslintrc.js
 
+# static
+static
+
 # Video files
 /videos
 uploads
