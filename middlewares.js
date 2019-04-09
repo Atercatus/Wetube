@@ -11,7 +11,7 @@ export const localsMiddleware = (req, res, next) => {
   // req.locals는 res.locals에 이미 변수가 있을 겉 같을때 사용한다
   // 권장사항은 아니다.
   res.locals.user = {
-    isAuthenticated: false,
+    isAuthenticated: true,
     id: 1
   };
   next();
