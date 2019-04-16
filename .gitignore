@@ -4,6 +4,10 @@
 yarn.lock
 .eslintrc.js
 
+# history
+/note
+*.hwp
+
 # static
 static
 

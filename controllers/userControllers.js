@@ -20,7 +20,6 @@ export const postJoin = async (req, res, next) => {
         name: name,
         email: email
       });
-      console.log(password);
       await User.register(user, password);
       next();
     } catch (err) {
@@ -38,6 +37,36 @@ export const postLogin = passport.authenticate("local", {
   failureRedirect: routes.login,
   successRedirect: routes.home
 });
+
+export const githubLogin = passport.authenticate("github");
+
+export const githubLoginCallback = async (_, __, profile, cb) => {
+  const {
+    _json: { id, avatar_url, name, email }
+  } = profile;
+
+  try {
+    const user = await User.findOne({ email: email });
+    if (user) {
+      user.gitgubId = id;
+      user.save();
+      return cb(null, user);
+    }
+    const newUser = await User.create({
+      email,
+      name,
+      githubId: id,
+      avatarUrl: avatar_url
+    });
+    return cb(null, newUser);
+  } catch (err) {
+    return cb(err, null);
+  }
+};
+
+export const postGithubLogin = (req, res) => {
+  res.redirect(routes.home);
+};
 
 export const logout = (req, res) => {
   req.logout();
