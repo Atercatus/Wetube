@@ -6,6 +6,7 @@ export const getJoin = (req, res) => {
   res.render("join");
 };
 
+// local stratergy
 export const postJoin = async (req, res, next) => {
   const {
     body: { name, email, password, confirmPasswd }
@@ -38,6 +39,7 @@ export const postLogin = passport.authenticate("local", {
   successRedirect: routes.home
 });
 
+// github auth
 export const githubLogin = passport.authenticate("github");
 
 export const githubLoginCallback = async (_, __, profile, cb) => {
@@ -46,9 +48,13 @@ export const githubLoginCallback = async (_, __, profile, cb) => {
   } = profile;
 
   try {
+    if (!email || email === "") {
+      throw Error("No email");
+    }
     const user = await User.findOne({ email: email });
+    console.log(user);
     if (user) {
-      user.gitgubId = id;
+      user.githubId = id;
       user.save();
       return cb(null, user);
     }
@@ -68,14 +74,89 @@ export const postGithubLogin = (req, res) => {
   res.redirect(routes.home);
 };
 
+// facebook auth
+export const facebookLogin = passport.authenticate("facebook");
+
+export const facebookLoginCallback = (
+  accessToken,
+  refreshToken,
+  profile,
+  cb
+) => {
+  console.log(accessToken, refreshToken, profile, cb);
+};
+
+export const postFacebookLogin = (req, res) => {
+  res.redirect(routes.home);
+};
+
+// google auth
+export const googleLogin = passport.authenticate("google", {
+  scope: ["profile", "email"]
+});
+
+export const googleLoginCallback = async (
+  accessToken,
+  refreshToken,
+  profile,
+  cb
+) => {
+  console.log(profile);
+
+  const {
+    _json: { sub, email, email_verified, picture, name }
+  } = profile;
+
+  try {
+    if (email_verified === false) {
+      throw Error("Email is not verified!");
+    }
+    const user = await User.findOne({ email: email });
+
+    console.log(user);
+
+    if (user) {
+      user.googleId = sub;
+      user.save();
+      return cb(null, user);
+    }
+    const newUser = await User.create({
+      email,
+      name,
+      googleId: sub,
+      avatarUrl: picture
+    });
+    return cb(null, newUser);
+  } catch (err) {
+    return cb(err, null);
+  }
+};
+
+export const postGoogleLogin = (req, res) => {
+  res.redirect(routes.home);
+};
+
+//////////////////
 export const logout = (req, res) => {
   req.logout();
   res.redirect(routes.home);
 };
 
-export const userDetail = (req, res) => {
-  console.log("help");
-  res.render("userDetail");
+export const loggedinUserDetail = (req, res) => {
+  console.log(req.user);
+  res.render("userDetail", { pageTitle: "User Detail", user: req.user });
+};
+
+export const userDetail = async (req, res) => {
+  const {
+    params: { id }
+  } = req;
+  try {
+    const user = await User.findById(id);
+    res.render("userDetail", { pageTitle: "User Detail", user: user });
+  } catch (err) {
+    res.redirect(routes.home);
+  }
 };
 
 export const editProfile = (req, res) => {
