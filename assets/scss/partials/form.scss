@@ -41,4 +41,14 @@
     //   max-width: 230px;
     // }
   }
+  .login-error {
+    border: 1px solid #ff7675;
+    border-radius: 5px;
+    background-color: #fab1a0;
+    max-width: 320px;
+    width: 100%;
+    text-align: center;
+    margin-bottom: 25px;
+    padding: 15px;
+  }
 }

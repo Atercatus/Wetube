@@ -31,12 +31,13 @@ export const postJoin = async (req, res, next) => {
 };
 
 export const getLogin = (req, res) => {
-  res.render("login");
+  res.render("login", { errmsg: req.flash("error")[0] });
 };
 
 export const postLogin = passport.authenticate("local", {
   failureRedirect: routes.login,
-  successRedirect: routes.home
+  successRedirect: routes.home,
+  failureFlash: "Invalid username or password."
 });
 
 // github auth
@@ -51,42 +52,44 @@ export const githubLoginCallback = async (_, __, profile, cb) => {
     if (!email || email === "") {
       throw Error("No email");
     }
+
     const user = await User.findOne({ email: email });
-    console.log(user);
+
     if (user) {
       user.githubId = id;
       user.save();
       return cb(null, user);
     }
+
     const newUser = await User.create({
       email,
       name,
       githubId: id,
       avatarUrl: avatar_url
     });
+
     return cb(null, newUser);
   } catch (err) {
     return cb(err, null);
   }
 };
 
+export const githubAuthCallback = (req, res, next) => {
+  passport.authenticate("github", (err, user) => {
+    if (err) {
+      req.flash("error", "Github Oauth is failed.");
+      res.redirect(routes.login);
+    } else {
+      req.logIn(user, err => {
+        if (err) next(err);
+      });
+      // do nothing
+      next();
+    }
+  })(req, res, next);
+};
+
 export const postGithubLogin = (req, res) => {
-  res.redirect(routes.home);
-};
-
-// facebook auth
-export const facebookLogin = passport.authenticate("facebook");
-
-export const facebookLoginCallback = (
-  accessToken,
-  refreshToken,
-  profile,
-  cb
-) => {
-  console.log(accessToken, refreshToken, profile, cb);
-};
-
-export const postFacebookLogin = (req, res) => {
   res.redirect(routes.home);
 };
 
@@ -101,8 +104,6 @@ export const googleLoginCallback = async (
   profile,
   cb
 ) => {
-  console.log(profile);
-
   const {
     _json: { sub, email, email_verified, picture, name }
   } = profile;
@@ -128,6 +129,7 @@ export const googleLoginCallback = async (
     });
     return cb(null, newUser);
   } catch (err) {
+    console.log(err);
     return cb(err, null);
   }
 };
@@ -169,3 +171,18 @@ export const changePassword = (req, res) => {
 
 // lala = () => true // 이는 return true;와 같다
 // implicit return(암시적 리턴): {}를 적지않으면 자동으로 리턴으로 된다.
+
+// facebook auth
+export const facebookLogin = passport.authenticate("facebook");
+
+export const facebookLoginCallback = (
+  accessToken,
+  refreshToken,
+  profile,
+  cb
+) => {
+  console.log(accessToken, refreshToken, profile, cb);
+};
+export const postFacebookLogin = (req, res) => {
+  res.redirect(routes.home);
+};
