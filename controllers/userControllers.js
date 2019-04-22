@@ -3,7 +3,7 @@ import routes from "../routes";
 import User from "../models/User";
 
 export const getJoin = (req, res) => {
-  res.render("join");
+  res.render("join", { errmsg: req.flash("error")[0] });
 };
 
 // local stratergy
@@ -12,21 +12,22 @@ export const postJoin = async (req, res, next) => {
     body: { name, email, password, confirmPasswd }
   } = req;
 
-  if (password !== confirmPasswd) {
-    res.status(400);
-    res.render("join");
-  } else {
-    try {
-      const user = await User({
-        name: name,
-        email: email
-      });
-      await User.register(user, password);
-      next();
-    } catch (err) {
-      console.log(err);
-      res.redirect(routes.home);
+  try {
+    if (password !== confirmPasswd) {
+      res.status(400);
+      throw Error("Passwords do not match.");
     }
+    const user = await User({
+      name: name,
+      email: email
+    });
+    await User.register(user, password);
+    next();
+  } catch (err) {
+    console.log(err);
+    // redirect 할 때 join 에서 메시지 출력하도록 구성한다.
+    req.flash("error", err.message);
+    res.redirect(routes.join);
   }
 };
 
@@ -43,20 +44,19 @@ export const postLogin = passport.authenticate("local", {
 // github auth
 export const githubLogin = passport.authenticate("github");
 
-export const githubLoginCallback = async (_, __, profile, cb) => {
+export const githubAuthCallback = async (_, __, profile, cb) => {
   const {
     _json: { id, avatar_url, name, email }
   } = profile;
 
   try {
-    if (!email || email === "") {
-      throw Error("No email");
-    }
+    if (!email || email === "") throw Error();
 
     const user = await User.findOne({ email: email });
 
     if (user) {
       user.githubId = id;
+      if (!user.avatarUrl) user.avatarUrl = avatar_url;
       user.save();
       return cb(null, user);
     }
@@ -74,7 +74,7 @@ export const githubLoginCallback = async (_, __, profile, cb) => {
   }
 };
 
-export const githubAuthCallback = (req, res, next) => {
+export const githubAuth = (req, res, next) => {
   passport.authenticate("github", (err, user) => {
     if (err) {
       req.flash("error", "Github Oauth is failed.");
@@ -90,6 +90,7 @@ export const githubAuthCallback = (req, res, next) => {
 };
 
 export const postGithubLogin = (req, res) => {
+  console.log("postcal");
   res.redirect(routes.home);
 };
 
@@ -98,7 +99,7 @@ export const googleLogin = passport.authenticate("google", {
   scope: ["profile", "email"]
 });
 
-export const googleLoginCallback = async (
+export const googleAuthCallback = async (
   accessToken,
   refreshToken,
   profile,
@@ -114,10 +115,11 @@ export const googleLoginCallback = async (
     }
     const user = await User.findOne({ email: email });
 
-    console.log(user);
-
     if (user) {
       user.googleId = sub;
+      user.avatarUrl = picture;
+      console.log(user.avatarUrl);
+
       user.save();
       return cb(null, user);
     }
@@ -155,6 +157,7 @@ export const userDetail = async (req, res) => {
   } = req;
   try {
     const user = await User.findById(id);
+    console.log(user);
     res.render("userDetail", { pageTitle: "User Detail", user: user });
   } catch (err) {
     res.redirect(routes.home);
@@ -171,18 +174,3 @@ export const changePassword = (req, res) => {
 
 // lala = () => true // 이는 return true;와 같다
 // implicit return(암시적 리턴): {}를 적지않으면 자동으로 리턴으로 된다.
-
-// facebook auth
-export const facebookLogin = passport.authenticate("facebook");
-
-export const facebookLoginCallback = (
-  accessToken,
-  refreshToken,
-  profile,
-  cb
-) => {
-  console.log(accessToken, refreshToken, profile, cb);
-};
-export const postFacebookLogin = (req, res) => {
-  res.redirect(routes.home);
-};

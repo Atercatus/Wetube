@@ -2,6 +2,8 @@ extends layouts/main
 
 block content
     .form-container
+        if errmsg
+            .form__errmsg=errmsg
         form(action=routes.postJoin, method="post")
             input(type="text", name="name", placeholder="Full Name", required=true)
             input(type="emial", name="email", placeholder="Email", required=true)
