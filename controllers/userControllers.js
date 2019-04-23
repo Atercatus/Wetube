@@ -61,11 +61,16 @@ export const githubAuthCallback = async (_, __, profile, cb) => {
   } = profile;
 
   try {
-    if (!email || email === "") throw Error();
+    if (!email || email === "") throw Error("Github email is private.");
 
-    const user = await User.findOne({ email: email });
+    // 이미 github을 통한 가입이 되어있는 경우
+    const gitUser = await User.findOne({ githubId: id });
+    if (gitUser) {
+      return cb(null, gitUser);
+    }
 
     // 같은 email로 가입이 되어있는 경우
+    const user = await User.findOne({ email: email });
     // login
     if (user) {
       if (!user.githubId || user.githubId === "") {

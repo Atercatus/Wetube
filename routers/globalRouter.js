@@ -8,11 +8,11 @@ import {
   postJoin,
   getLogin,
   postLogin,
-  githubLogin,
   postGithubLogin,
   googleLogin,
   postGoogleLogin,
-  githubAuth
+  githubAuth,
+  githubLogin
 } from "../controllers/userControllers";
 import { onlyPublic, onlyPrivate } from "../middlewares";
 
