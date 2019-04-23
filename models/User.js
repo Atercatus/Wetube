@@ -2,12 +2,13 @@ import mongoose from "mongoose";
 import passportLocalMongoose from "passport-local-mongoose";
 
 const UserSchema = new mongoose.Schema({
-  email: { type: String, index: true },
-  OAuth: Boolean,
-  name: String,
-  avatarUrl: String,
-  githubId: Number,
-  googleId: Number
+  userId: { type: String, index: true },
+  email: String,
+  OAuth: String,
+  nickname: String,
+  avatarUrl: String
+  // githubId: Number,
+  // googleId: Number
 });
 
 // serial deserial을 username을 이용해서 하기 때문에 custom 을 만든다.
@@ -25,7 +26,7 @@ UserSchema.statics.deserializeUser = function() {
   };
 };
 UserSchema.plugin(passportLocalMongoose, {
-  usernameField: "email",
+  usernameField: "userId",
   errorMessages: {
     MissingPasswordError: "No password was given",
     // AttemptTooSoonError: "Account is currently locked. Try again later",

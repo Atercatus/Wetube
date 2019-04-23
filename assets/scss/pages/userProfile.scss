@@ -13,6 +13,10 @@
       font-size: 18px;
       margin-top: 15px;
     }
+    .profile__email {
+      font-size: 18px;
+      margin-top: 15px;
+    }
     img {
       width: 100px;
       height: 100px;
@@ -22,6 +26,13 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    a {
+      width: 200px;
+      button {
+        width: 100%;
+      }
+    }
+
     a:not(:last-child) {
       margin-bottom: 20px;
     }

@@ -9,25 +9,25 @@ export const getJoin = (req, res) => {
 // local stratergy
 export const postJoin = async (req, res, next) => {
   const {
-    body: { name, email, password, confirmPasswd }
+    body: { userId, nickname, email, password, confirmPasswd }
   } = req;
 
   try {
     // 비밀번호 검증
     if (password !== confirmPasswd) {
-      res.status(400);
       throw Error("Passwords do not match.");
     }
 
     const user = await User({
-      OAuth: false,
-      name: name,
-      email: email
+      OAuth: "local",
+      userId,
+      nickname,
+      email
     });
 
     // name 중복 검사
-    if (await User.findOne({ name: name })) {
-      throw Error("Name is duplicated");
+    if (await User.findOne({ userId })) {
+      throw Error("ID is duplicated");
     }
 
     // 비밀번호 암호화
@@ -35,7 +35,7 @@ export const postJoin = async (req, res, next) => {
 
     next();
   } catch (err) {
-    console.log(err);
+    // console.log(err);
     // redirect 할 때 join 에서 메시지 출력하도록 구성한다.
     req.flash("error", err.message);
     res.redirect(routes.join);
@@ -55,42 +55,28 @@ export const postLogin = passport.authenticate("local", {
 // github auth
 export const githubLogin = passport.authenticate("github");
 
-export const githubAuthCallback = async (_, __, profile, cb) => {
+export const githubAuthCallback = async (accessToken, __, profile, cb) => {
   const {
-    _json: { id, avatar_url, name, email }
+    _json: { id, avatar_url, email, login }
   } = profile;
 
   try {
     if (!email || email === "") throw Error("Github email is private.");
 
     // 이미 github을 통한 가입이 되어있는 경우
-    const gitUser = await User.findOne({ githubId: id });
-    if (gitUser) {
-      return cb(null, gitUser);
-    }
+    const user = await User.findOne({ userId: id });
 
-    // 같은 email로 가입이 되어있는 경우
-    const user = await User.findOne({ email: email });
     // login
     if (user) {
-      if (!user.githubId || user.githubId === "") {
-        user.githubId = id;
-      }
-
-      if (!user.avatarUrl || user.avatarUrl === "") {
-        user.avatarUrl = avatar_url;
-      }
-
-      await user.save();
       return cb(null, user);
     }
 
     // join
     const newUser = await User.create({
-      OAuth: true,
+      OAuth: "github",
       email,
-      name,
-      githubId: id,
+      nickname: login,
+      userId: id,
       avatarUrl: avatar_url
     });
 
@@ -104,20 +90,23 @@ export const githubAuth = (req, res, next) => {
   passport.authenticate("github", (err, user) => {
     if (err) {
       req.flash("error", err.message);
-      // req.flash("error", "Github Oauth is failed.");
       res.redirect(routes.login);
     } else {
       req.logIn(user, err => {
         if (err) next(err);
       });
-      // do nothing
+
       next();
     }
   })(req, res, next);
 };
 
 export const postGithubLogin = (req, res) => {
-  res.redirect(routes.home);
+  if (!req.user.nickname || req.user.nickname === "") {
+    res.redirect(`/users${routes.OAuthJoin}`);
+  } else {
+    res.redirect(routes.home);
+  }
 };
 
 // google auth
@@ -135,34 +124,31 @@ export const googleAuthCallback = async (
     _json: { sub, email, email_verified, picture, name }
   } = profile;
 
+  console.log(profile);
+  console.log(sub);
+
   try {
     if (email_verified === false) {
       throw Error("Email is not verified!");
     }
-    const user = await User.findOne({ email: email });
+    const user = await User.findOne({ userId: sub });
 
     // login
     if (user) {
-      user.googleId = sub;
-      user.avatarUrl = picture;
-      console.log(user.avatarUrl);
-
-      user.save();
       return cb(null, user);
     }
 
     // join
     const newUser = await User.create({
-      OAuth: true,
+      OAuth: "google",
       email,
-      name,
-      googleId: sub,
+      nickname: name,
+      userId: sub,
       avatarUrl: picture
     });
     return cb(null, newUser);
   } catch (err) {
-    console.log(err);
-    return cb(err, null);
+    return cb(err);
   }
 };
 
@@ -182,36 +168,40 @@ export const loggedinUserDetail = (req, res) => {
 
 export const userDetail = async (req, res) => {
   const {
-    params: { id }
+    params: { userId }
   } = req;
   try {
-    const user = await User.findById(id);
+    const user = await User.findByOne({ userId: userId });
     res.render("userDetail", { pageTitle: "User Detail", user: user });
   } catch (err) {
     res.redirect(routes.home);
   }
 };
 
+export const getEditProfile = (req, res) => {
+  res.render("editProfile");
+};
+
 export const postEditProfile = async (req, res) => {
   const {
-    body: { name, email },
+    body: { nickname, email },
     file
   } = req;
 
   try {
-    await User.findByIdAndUpdate(req.user.id, {
-      name,
-      email,
-      avatarUrl: file ? "/" + file.path : req.user.avatarUrl
-    });
+    await User.findOneAndUpdate(
+      { userId: req.user.userId },
+      {
+        nickname,
+        email,
+        avatarUrl: file ? "/" + file.path : req.user.avatarUrl
+      }
+    );
+
     res.redirect(`/users${routes.me}`);
   } catch (err) {
     res.redirect(`/users${routes.editProfile}`);
   }
-};
-
-export const getEditProfile = (req, res) => {
-  res.render("editProfile");
 };
 
 export const getChangePassword = (req, res) => {

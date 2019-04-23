@@ -5,11 +5,12 @@ block content
    .user-profile
       .user-profile__header
          img.u-avatar(src=user.avatarUrl)
-         h4.profile__username=user.name
-      if user.id === loggedUser.id
+         h4.profile__username=user.nickname
+         h4.profile__email=user.email
+      if user.userId === loggedUser.userId
          .user-profile__btns
             a(href=`/users${routes.editProfile}`)
                button ✏️ Edit Profile
-            if !user.OAuth
+            if user.OAuth === "local"
                a(href=`/users${routes.changePassword}`)
                   button 🔒 Change Password

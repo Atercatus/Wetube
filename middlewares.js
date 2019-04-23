@@ -31,7 +31,7 @@ export const onlyPrivate = (req, res, next) => {
 };
 
 export const onlyNotOAuth = (req, res, next) => {
-  if (!req.user.OAuth) {
+  if (req.user.OAuth === "local") {
     next();
   } else {
     res.redirect(routes.home);
