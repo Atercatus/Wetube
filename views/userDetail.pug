@@ -7,10 +7,18 @@ block content
          img.u-avatar(src=user.avatarUrl)
          h4.profile__username=user.nickname
          h4.profile__email=user.email
-      if user.userId === loggedUser.userId
+      if loggedUser && user.userId === loggedUser.userId
          .user-profile__btns
             a(href=`/users${routes.editProfile}`)
                button ✏️ Edit Profile
             if user.OAuth === "local"
                a(href=`/users${routes.changePassword}`)
                   button 🔒 Change Password
+   .home-videos 
+      each video in user.videos
+         +videoBlock({
+            id:video.id,
+            title:video.title,
+            views:video.views,
+            videoFile:video.fileUrl
+         })

@@ -6,7 +6,20 @@ const UserSchema = new mongoose.Schema({
   email: String,
   OAuth: String,
   nickname: String,
-  avatarUrl: String
+  avatarUrl: String,
+  comments: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Comment"
+    }
+  ],
+  videos: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Video"
+    }
+  ]
+
   // githubId: Number,
   // googleId: Number
 });

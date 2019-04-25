@@ -124,9 +124,6 @@ export const googleAuthCallback = async (
     _json: { sub, email, email_verified, picture, name }
   } = profile;
 
-  console.log(profile);
-  console.log(sub);
-
   try {
     if (email_verified === false) {
       throw Error("Email is not verified!");
@@ -168,12 +165,21 @@ export const loggedinUserDetail = (req, res) => {
 
 export const userDetail = async (req, res) => {
   const {
-    params: { userId }
+    params: { id }
   } = req;
+
   try {
-    const user = await User.findByOne({ userId: userId });
-    res.render("userDetail", { pageTitle: "User Detail", user: user });
+    const user = await User.findOne({ userId: id }).populate("videos");
+    const videos = user.videos || {};
+    console.log(user);
+
+    res.render("userDetail", {
+      pageTitle: "User Detail",
+      user: user,
+      video: videos
+    });
   } catch (err) {
+    console.log(err);
     res.redirect(routes.home);
   }
 };
