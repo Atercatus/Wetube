@@ -64,7 +64,8 @@ export const videoDetail = async (req, res) => {
 
   try {
     const video = await Video.findById(id).populate("creator");
-    console.log(video);
+    video.views += 1;
+    await video.save();
     res.render("videoDetail", { pageTitle: video.title, video: video });
   } catch (error) {
     console.log(error);

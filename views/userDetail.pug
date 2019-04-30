@@ -14,11 +14,11 @@ block content
             if user.OAuth === "local"
                a(href=`/users${routes.changePassword}`)
                   button 🔒 Change Password
-   .home-videos 
-      each video in user.videos
-         +videoBlock({
-            id:video.id,
-            title:video.title,
-            views:video.views,
-            videoFile:video.fileUrl
-         })
+      .user-profile__videos
+         each video in user.videos
+            +videoBlock({
+               id:video.id,
+               title:video.title,
+               views:video.views,
+               videoFile:video.fileUrl
+            })

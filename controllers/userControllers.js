@@ -171,12 +171,12 @@ export const userDetail = async (req, res) => {
   try {
     const user = await User.findOne({ userId: id }).populate("videos");
     const videos = user.videos || {};
-    console.log(user);
+    console.log(videos);
 
     res.render("userDetail", {
       pageTitle: "User Detail",
       user: user,
-      video: videos
+      videos: videos
     });
   } catch (err) {
     console.log(err);
