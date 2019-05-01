@@ -1,8 +1,8 @@
 mixin videoPlayer(video = {})
-    .videoPlayer#jsVideoPlayer
+    div(tabindex="0").videoPlayer#jsVideoPlayer
         video(src=`/${video.src}`)
         .videoPlayer__progressbar
-        .videoPlayer__controls
+        .videoPlayer__controls#jsControls
             .videoPlayer__controls-left
                 span.play-button#jsPlayButton
                     i.fas.fa-play
