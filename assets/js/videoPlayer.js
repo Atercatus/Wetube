@@ -19,7 +19,9 @@ window.addEventListener("keydown", function(e) {
 });
 
 function setFullscreenBtn() {
-  fullScreenBtn.innerHTML = '<i class="fas fa-expand"></i>';
+  fullScreenBtn.classList.remove("fa-compress");
+  fullScreenBtn.classList.add("fa-expand");
+
   fullScreenBtn.addEventListener("click", goFullscreen);
   fullScreenBtn.removeEventListener("click", exitFullscreen);
 }
@@ -39,7 +41,9 @@ function exitFullscreen() {
 }
 
 function setExitFullscreenBtn() {
-  fullScreenBtn.innerHTML = '<i class="fas fa-compress"></i>';
+  fullScreenBtn.classList.remove("fa-expand");
+  fullScreenBtn.classList.add("fa-compress");
+
   fullScreenBtn.removeEventListener("click", goFullscreen);
   fullScreenBtn.addEventListener("click", exitFullscreen);
 }
@@ -79,20 +83,24 @@ const formatDate = secs => {
 function handlePlay() {
   if (videoPlayer.paused) {
     videoPlayer.play();
-    playBtn.innerHTML = '<i class="fas fa-pause"></i>';
+    playBtn.classList.remove("fa-play");
+    playBtn.classList.add("fa-pause");
   } else {
     videoPlayer.pause();
-    playBtn.innerHTML = '<i class="fas fa-play"></i>';
+    playBtn.classList.remove("fa-pause");
+    playBtn.classList.add("fa-play");
   }
 }
 
 function handleVolume() {
   if (videoPlayer.muted) {
     videoPlayer.muted = false;
-    volumeBtn.innerHTML = '<i class="fas fa-volume-up"></i>';
+    volumeBtn.classList.remove("fa-volume-mute");
+    volumeBtn.classList.add("fa-volume-up");
   } else {
     videoPlayer.muted = true;
-    volumeBtn.innerHTML = '<i class="fas fa-volume-mute"></i>';
+    volumeBtn.classList.remove("fa-volume-up");
+    volumeBtn.classList.add("fa-volume-mute");
   }
 }
 
@@ -106,7 +114,8 @@ function setCurrentTime() {
 
 function handleEnded() {
   videoPlayer.currentTime = 0;
-  playBtn.innerHTML = '<i class="fas fa-play"></i>';
+  playBtn.classList.remove("fa-pause");
+  playBtn.classList.add("fa-play");
 }
 
 function videoAhead() {

@@ -41,21 +41,48 @@
     width: 100%;
     padding: 10px;
     font-size: 14px;
-    // background-color: rgba(0, 0, 0, 0.5);
-    // display: grid;
-    // grid-template-columns: repeat(3, 1fr);
+
     .videoPlayer__controls-left {
       display: flex;
       align-items: center;
-      .play-button {
+      .videoPlayer__volume {
+        display: inline-flex;
+        .videoPlayer__volume-slider {
+          display: flex;
+          max-width: 40px;
+          .videoPlayer__volume-slider-handle {
+            // display: inline-block;
+            overflow: hidden;
+            max-width: 40px;
+            -webkit-transition: all 0.5s ease-in-out;
+            -moz-transition: all 0.5s ease-in-out;
+            -o-transition: all 0.5s ease-in-out;
+            transition: all 0.5s ease-in-out;
+          }
+          &:hover {
+            max-width: 100%;
+            .videoPlayer__volume-slider-handle {
+              max-width: 100%;
+            }
+          }
+        }
+
+        .videoPlayer__volume-button {
+          width: 21px;
+          margin-right: 20px;
+        }
+      }
+
+      .videoPlayer__play-button {
         margin-left: 15px;
         margin-right: 25px;
       }
-      .volume-button {
-        margin-right: 23px;
-      }
-      .time-display {
-        display: flex;
+
+      .videoPlayer__time-display {
+        white-space: nowrap;
+        display: inline-block;
+        max-width: 40px;
+
         span {
           margin-right: 2px;
           margin-left: 2px;
@@ -65,7 +92,7 @@
     .videoPlayer__controls-right {
       align-items: center;
       display: flex;
-      .fullscreen-button {
+      .videoPlayer__fullscreen-button {
         margin-right: 15px;
       }
     }
@@ -76,15 +103,3 @@
     }
   }
 }
-
-// .videoPlayer__column:first-child {
-//   align-items: center;
-//   span:first-child {
-//     margin-right: 10px;
-//   }
-//     .videoplayer__column:last-child {
-//       justify-self: end;
-//     }
-//     .videoplayer__column:nth-child(2) {
-//       justify-self: center;
-//     }
