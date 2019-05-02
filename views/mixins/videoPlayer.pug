@@ -6,10 +6,10 @@ mixin videoPlayer(video = {})
             .videoPlayer__controls-left
                 span.videoPlayer__play-button
                     i.fas.fa-play#jsPlayButton
-                span.videoPlayer__volume-button
+                button.videoPlayer__volume-button
                     i.fas.fa-volume-up#jsVolumeButton
-                    div.videoPlayer__volume-slider
-                        .videoPlayer__volume-slider-handle asdasdhjkghjghk
+                div.videoPlayer__volume-slider
+                    input#jsVolume(type="range", min="0", max="100", step="1")
                 span.videoPlayer__time-display
                     span#currentTime 00:00:00 
                     span /
