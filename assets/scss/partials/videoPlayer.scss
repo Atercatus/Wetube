@@ -1,3 +1,5 @@
+$controls-margin: 5px;
+
 .videoPlayer {
   position: relative;
   display: flex;
@@ -29,6 +31,7 @@
   }
 
   .videoPlayer__controls {
+    font-size: 0px;
     background-color: rgba(0, 0, 0, 0.7);
     position: absolute;
     opacity: 0;
@@ -46,8 +49,9 @@
       border: none;
       margin: 0;
       padding: 0;
-      width: auto;
-      height: 100%;
+      font-size: 0px;
+      width: 36px;
+      height: 36px;
       overflow: visible;
       background: transparent;
 
@@ -79,7 +83,7 @@
       .videoPlayer__play-button {
         vertical-align: middle;
         display: inline-block;
-        margin-right: 15px;
+        margin-right: $controls-margin;
       }
 
       .videoPlayer__volume-button {
@@ -88,21 +92,23 @@
         align-items: center;
         margin-top: 0px;
         margin-bottom: 0px;
+        width: 50px;
 
         &:hover + .videoPlayer__volume-slider {
           max-width: 100%;
-          margin-left: 15px;
-          margin-right: 15px;
+          margin-left: $controls-margin;
+          margin-right: $controls-margin - 2px;
         }
       }
     }
     .videoPlayer__volume-slider {
+      transform: translate(-13px);
       vertical-align: middle;
       display: inline-block;
       max-width: 0%;
       width: auto;
       overflow: hidden;
-      margin-right: 15px;
+      margin-right: $controls-margin;
       align-items: center;
 
       -webkit-transition: all 0.2s ease-in-out;
@@ -112,17 +118,17 @@
 
       &:hover {
         max-width: 100%;
-        margin-right: 15px;
-        margin-left: 15px;
+        margin-right: $controls-margin - 2px;
+        margin-left: $controls-margin;
       }
 
       input {
+        cursor: pointer;
         &::-webkit-slider-runnable-track {
           background-color: $grey;
           height: 5px;
         }
         &::-webkit-slider-thumb {
-          cursor: pointer;
           all: unset;
           background-color: white;
           height: 15px;
@@ -158,7 +164,7 @@
       .videoPlayer__fullscreen-button {
         vertical-align: middle;
         display: inline-block;
-        margin-right: 15px;
+        margin-right: $controls-margin;
       }
 
       i {
