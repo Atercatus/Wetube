@@ -1,19 +1,21 @@
 mixin videoPlayer(video = {})
     div(tabindex="0").videoPlayer#jsVideoPlayer
         video(src=`/${video.src}`)
-        .videoPlayer__progressbar
-        .videoPlayer__controls#jsControls
-            .videoPlayer__controls-left
-                span.videoPlayer__play-button
-                    i.fas.fa-play#jsPlayButton
-                button.videoPlayer__volume-button
-                    i.fas.fa-volume-up#jsVolumeButton
-                div.videoPlayer__volume-slider
-                    input#jsVolume(type="range", min="0", max="100", step="1")
-                span.videoPlayer__time-display
-                    span#currentTime 00:00:00 
-                    span /
-                    span#totalTime
-            .videoPlayer__controls-right
-                span.videoPlayer__fullscreen-button
-                    i.fas.fa-expand#jsFullScreen
+        .videoPlayer__bottom
+            .videoPlayer__progressbar-container
+                .videoPlayer__progressbar-container
+            .videoPlayer__controls#jsControls
+                .videoPlayer__controls-left
+                    button.videoPlayer__play-button
+                        i.fas.fa-play#jsPlayButton
+                    button.videoPlayer__volume-button
+                        i.fas.fa-volume-up#jsVolumeButton
+                    div.videoPlayer__volume-slider
+                        input#jsVolume(type="range", min="0", max="100", step="1")
+                    span.videoPlayer__time-display
+                        span#currentTime 00:00:00 
+                        span /
+                        span#totalTime
+                .videoPlayer__controls-right
+                    span.videoPlayer__fullscreen-button
+                        i.fas.fa-expand#jsFullScreen
