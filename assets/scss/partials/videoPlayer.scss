@@ -100,61 +100,61 @@ $controls-margin: 5px;
           margin-right: $controls-margin - 2px;
         }
       }
-    }
-    .videoPlayer__volume-slider {
-      transform: translate(-13px);
-      vertical-align: middle;
-      display: inline-block;
-      max-width: 0%;
-      width: auto;
-      overflow: hidden;
-      margin-right: $controls-margin;
-      align-items: center;
-
-      -webkit-transition: all 0.2s ease-in-out;
-      -moz-transition: all 0.2s ease-in-out;
-      -o-transition: all 0.2s ease-in-out;
-      transition: all 0.2s ease-in-out;
-
-      &:hover {
-        max-width: 100%;
-        margin-right: $controls-margin - 2px;
-        margin-left: $controls-margin;
-      }
-
-      input {
-        cursor: pointer;
-        &::-webkit-slider-runnable-track {
-          background-color: $grey;
-          height: 5px;
-        }
-        &::-webkit-slider-thumb {
-          all: unset;
-          background-color: white;
-          height: 15px;
-          width: 15px;
-          border-radius: 50%;
-          position: relative;
-          top: -5px;
-        }
-      }
-    }
-
-    .videoPlayer__time-display {
-      vertical-align: middle;
-
-      display: inline-flex;
-      max-width: 40px;
-
-      span {
+      .videoPlayer__volume-slider {
+        transform: translate(-13px);
+        vertical-align: middle;
         display: inline-block;
-        margin-right: 2px;
-        margin-left: 2px;
+        max-width: 0%;
+        width: auto;
+        overflow: hidden;
+        margin-right: $controls-margin;
+        align-items: center;
+
+        -webkit-transition: all 0.2s ease-in-out;
+        -moz-transition: all 0.2s ease-in-out;
+        -o-transition: all 0.2s ease-in-out;
+        transition: all 0.2s ease-in-out;
+
+        &:hover {
+          max-width: 100%;
+          margin-right: $controls-margin - 2px;
+          margin-left: $controls-margin;
+        }
+
+        input {
+          cursor: pointer;
+          &::-webkit-slider-runnable-track {
+            background-color: $grey;
+            height: 5px;
+          }
+          &::-webkit-slider-thumb {
+            all: unset;
+            background-color: white;
+            height: 15px;
+            width: 15px;
+            border-radius: 50%;
+            position: relative;
+            top: -5px;
+          }
+        }
       }
-    }
-    i {
-      font-size: 18px;
-      cursor: pointer;
+
+      .videoPlayer__time-display {
+        vertical-align: middle;
+
+        display: inline-flex;
+        max-width: 40px;
+
+        span {
+          display: inline-block;
+          margin-right: 2px;
+          margin-left: 2px;
+        }
+      }
+      i {
+        font-size: 18px;
+        cursor: pointer;
+      }
     }
 
     .videoPlayer__controls-right {

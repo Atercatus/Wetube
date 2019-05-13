@@ -28,8 +28,6 @@ function setFullscreenBtn() {
 }
 
 function exitFullscreen() {
-  //   setExitFullScreenBtn();
-
   if (document.exitFullscreen) {
     document.exitFullscreen();
   } else if (document.mozCancelFullScreen) {
@@ -50,8 +48,6 @@ function setExitFullscreenBtn() {
 }
 
 function goFullscreen() {
-  //   setFullscreenBtn();
-
   if (videoContainer.requestFullscreen) {
     videoContainer.requestFullscreen();
   } else if (videoContainer.mozRequestFullscreen) {
