@@ -33,7 +33,7 @@ const config = {
           {
             loader: "postcss-loader", // css 호환성 문제 해결 (ex. 접두사)
             options: {
-              plugin() {
+              plugins: function() {
                 return [
                   autoprefixer({
                     browsers: "cover 99.5%"

@@ -1,5 +1,3 @@
-// let videoPlayer;
-// videoPlayer = videoContainer.querySelector("video");
 const videoContainer = document.getElementById("jsVideoPlayer");
 const videoPlayer = document.querySelector("#jsVideoPlayer video");
 const playBtn = document.getElementById("jsPlayButton");
@@ -8,6 +6,13 @@ const fullScreenBtn = document.getElementById("jsFullScreen");
 const currentTime = document.getElementById("currentTime");
 const totalTime = document.getElementById("totalTime");
 const volumeRange = document.getElementById("jsVolume");
+
+const registerView = async () => {
+  const videoId = window.location.href.split("/videos/")[1];
+  await fetch(`/api/${videoId}/view`, {
+    method: "POST"
+  });
+};
 
 window.addEventListener("keydown", function(e) {
   if (
@@ -135,6 +140,7 @@ function setCurrentTime() {
 }
 
 function handleEnded() {
+  registerView();
   videoPlayer.currentTime = 0;
   playBtn.classList.remove("fa-pause");
   playBtn.classList.add("fa-play");

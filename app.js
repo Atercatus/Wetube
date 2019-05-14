@@ -14,6 +14,7 @@ import flash from "connect-flash";
 import globalRouter from "./routers/globalRouter";
 import userRouter from "./routers/userRouter";
 import videoRouter from "./routers/videoRouter";
+import apiRouter from "./routers/apiRouter";
 import routes from "./routes";
 import { localsMiddleware } from "./middlewares";
 // export default가 아니기 때문에 이런식으로  import 해야한다.
@@ -55,5 +56,6 @@ app.use(localsMiddleware);
 app.use(routes.home, globalRouter);
 app.use(routes.users, userRouter);
 app.use(routes.videos, videoRouter);
+app.use(routes.api, apiRouter);
 
 export default app;

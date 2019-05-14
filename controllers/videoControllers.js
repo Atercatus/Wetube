@@ -6,7 +6,7 @@ export const home = async (req, res) => {
     const videos = await Video.find({}).sort({ _id: -1 });
     res.render("home", { pageTitle: "Home", videos: videos });
   } catch (error) {
-    console.log(error);
+    req.flash("error", error.message);
     res.render("home", { pageTitle: "Home", videos: [] });
   }
 };
@@ -64,8 +64,8 @@ export const videoDetail = async (req, res) => {
 
   try {
     const video = await Video.findById(id).populate("creator");
-    video.views += 1;
-    await video.save();
+    // video.views += 1;
+    // await video.save();
     res.render("videoDetail", { pageTitle: video.title, video: video });
   } catch (error) {
     console.log(error);
@@ -80,9 +80,6 @@ export const getEditVideo = async (req, res) => {
 
   try {
     const video = await Video.findById(id);
-
-    console.log(video.creator);
-    console.log(req.user.id);
 
     // protect video
     if (String(video.creator) !== req.user.id) {
@@ -137,4 +134,20 @@ export const deleteVideo = async (req, res) => {
   }
 
   res.redirect(routes.home);
+};
+
+export const postRegisterView = async (req, res) => {
+  const {
+    params: { id }
+  } = req;
+
+  try {
+    const video = await Video.findById(id);
+    video.views += 1;
+    video.save();
+    res.status(200);
+  } catch (err) {
+    res.status(400);
+    res.end();
+  }
 };
