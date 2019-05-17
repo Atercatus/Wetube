@@ -19,7 +19,9 @@ passport.use(
     {
       clientID: process.env.GH_ID,
       clientSecret: process.env.GH_SECRET,
-      callbackURL: `http://localhost:4000${routes.githubCallback}`
+      callbackURL: `https://protected-beyond-85072.herokuapp.com/${
+        routes.githubCallback
+      }`
     },
     githubAuthCallback
   )
@@ -30,7 +32,7 @@ passport.use(
     {
       clientID: process.env.GG_ID,
       clientSecret: process.env.GG_SECRET,
-      callbackURL: `http://localhost:4000${routes.googleCallback}`
+      callbackURL: `https://protected-beyond-85072.herokuapp.com/{routes.googleCallback}`
     },
     googleAuthCallback
   )
