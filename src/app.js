@@ -29,7 +29,7 @@ const CookieStore = MongoStore(session);
 // /uploads 의 url을 통해 요청이 들어오면 현재파일디렉토리/uploads의 파일을 서비스해준다.
 // 이는 좋지 않은 설계 => 서버에 파일이 존재하면 안된다.
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
-app.use("/static", express.static(path.join(__dirname, "static")));
+// app.use("/static", express.static(path.join(__dirname, "static")));
 
 app.use(helmet());
 app.set("view engine", "pug");
