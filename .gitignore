@@ -12,7 +12,7 @@ build
 *.hwp
 
 # static
-static
+# static
 
 # Video files
 /videos
