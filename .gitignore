@@ -4,6 +4,9 @@
 yarn.lock
 .eslintrc.js
 
+#build
+build
+
 # history
 /note
 *.hwp

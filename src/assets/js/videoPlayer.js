@@ -7,9 +7,9 @@ const currentTime = document.getElementById("currentTime");
 const totalTime = document.getElementById("totalTime");
 const volumeRange = document.getElementById("jsVolume");
 
-const registerView = async () => {
+const registerView = () => {
   const videoId = window.location.href.split("/videos/")[1];
-  await fetch(`/api/${videoId}/view`, {
+  fetch(`/api/${videoId}/view`, {
     method: "POST"
   });
 };
