@@ -55,7 +55,7 @@ export const postLogin = passport.authenticate("local", {
 // github auth
 export const githubLogin = passport.authenticate("github");
 
-export const githubAuthCallback = async (accessToken, __, profile, cb) => {
+export const githubAuthCallback = async (accessToken, __, profile, done) => {
   const {
     _json: { id, avatar_url, email, login }
   } = profile;
@@ -68,7 +68,7 @@ export const githubAuthCallback = async (accessToken, __, profile, cb) => {
 
     // login
     if (user) {
-      return cb(null, user);
+      return done(null, user);
     }
 
     // join
@@ -80,14 +80,15 @@ export const githubAuthCallback = async (accessToken, __, profile, cb) => {
       avatarUrl: avatar_url
     });
 
-    return cb(null, newUser);
+    return done(null, newUser);
   } catch (err) {
-    return cb(err, null);
+    return done(err, null);
   }
 };
 
 export const githubAuth = (req, res, next) => {
   passport.authenticate("github", (err, user) => {
+    //githubAuth가 완전히 종료 되어야 githubAuthCallback이 실행된다.
     if (err) {
       req.flash("error", err.message);
       res.redirect(routes.login);
@@ -102,11 +103,7 @@ export const githubAuth = (req, res, next) => {
 };
 
 export const postGithubLogin = (req, res) => {
-  if (!req.user.nickname || req.user.nickname === "") {
-    res.redirect(`/users${routes.OAuthJoin}`);
-  } else {
-    res.redirect(routes.home);
-  }
+  res.redirect(routes.home);
 };
 
 // google auth
